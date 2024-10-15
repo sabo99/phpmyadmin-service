@@ -1,5 +1,14 @@
 FROM phpmyadmin/phpmyadmin
 
+# Install Imagick, Intl, GD, and other dependencies
+RUN apt-get update && \
+    apt-get install -y libmagickwand-dev libicu-dev libpng-dev --no-install-recommends && \
+    pecl install imagick && \
+    docker-php-ext-install intl gd && \
+    docker-php-ext-enable imagick intl gd
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # Copy the custom configuration file
 COPY . .
 
